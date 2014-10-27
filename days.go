@@ -3,6 +3,7 @@ package days
 import (
 	"appengine"
 	"appengine/datastore"
+	"io"
 	"time"
 )
 
@@ -34,4 +35,23 @@ func (t *Task) save(c appengine.Context) (*Task, error) {
 	}
 	t.Id = k.IntID()
 	return t, nil
+}
+
+func decodeTask(r io.ReadCloser) (*Task, error) {
+	defer r.Close()
+	var task Task
+	err := json.NewDecoder(r).Decode(&task)
+	return &task, err
+}
+
+func listTasks(c appengine.Context) ([]Task, error) {
+	tasks := []Task{}
+	keys, err := datastore.NewQuery("Task").Ancestor(tasklistkey(c)).Order("-Done").Order("Scheduled").GetAll(c, &tasks)
+	if err != nil {
+		return nil, err
+	}
+	for i := 0; i < len(tasks); i++ {
+		tasks[i].Id = keys[i].IntID()
+	}
+	return tasks, nil
 }
