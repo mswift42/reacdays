@@ -2,6 +2,9 @@ package days
 
 import (
 	"appengine/aetest"
+	"encoding/json"
+	"io/ioutil"
+	"strings"
 	"testing"
 	"time"
 )
@@ -86,5 +89,33 @@ func TestSaveAndList(t *testing.T) {
 	}
 	if t3saved.Id != tasks[2].Id {
 		t.Error("Expected id of 3rd task to be == saved 3rd task")
+	}
+}
+
+func TestDecodeTask(t *testing.T) {
+
+	var testjson = `{"summary":"first summary" , "id": 123}`
+	t1, err := genTask("31/01/2014", "first summary", 123)
+	if err != nil {
+		t.Fatal(err)
+	}
+	b, nerr := json.Marshal(t1)
+	if nerr != nil {
+		t.Fatal(err)
+	}
+	var t2 Task
+	unerr := json.Unmarshal(b, &t2)
+	if unerr != nil {
+		t.Fatal(err)
+	}
+	if t2.Id != 123 {
+		t.Error("Expected unmarschalled task id to be 123, got: ", t2.Id)
+	}
+	dec, err := decodeTask(ioutil.NopCloser(strings.NewReader(testjson)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if dec.Id != 123 {
+		t.Error("Expected decoded tasks id to be 123, got: ", dec.Id)
 	}
 }
