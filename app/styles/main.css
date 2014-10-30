@@ -27,3 +27,6 @@ body {
     color: #000;
     padding: 0.2em 0;
 }
+.maincontainer {
+    margin-top:80px;
+}
