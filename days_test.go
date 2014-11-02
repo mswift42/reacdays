@@ -4,6 +4,8 @@ import (
 	"appengine/aetest"
 	"encoding/json"
 	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 	"time"
@@ -117,5 +119,34 @@ func TestDecodeTask(t *testing.T) {
 	}
 	if dec.Id != 123 {
 		t.Error("Expected decoded tasks id to be 123, got: ", dec.Id)
+	}
+}
+
+func TestHandler(t *testing.T) {
+	c, err := aetest.NewContext(nil)
+	t1, err := genTask("31/01/2014", "first task", 123)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, nerr := t1.save(c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	resp := httptest.NewRecorder()
+	uri := "/tasks"
+	req, err := http.NewRequest("GET", uri, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	http.DefaultServeMux.ServeHTTP(resp, req)
+	if p, err := ioutil.ReadAll(resp.Body); err != nil {
+		t.Fail()
+	} else {
+		if !strings.Contains(string(p), "first task") {
+			t.Errorf("header response doesn't match :\n%s", p)
+		}
 	}
 }

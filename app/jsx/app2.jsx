@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 'use strict';
 define([], function () {
-    return React.createClass({
+    var TaskList =  React.createClass({
         loadTasksFromServer: function() {
             $.ajax({
                 url: "/tasks",
@@ -28,4 +28,5 @@ define([], function () {
             );
         }
     });
+    return TaskList;
 });
