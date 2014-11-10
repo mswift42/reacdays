@@ -7,6 +7,7 @@
                  [enlive "1.1.5"]
                  ;; ReactJS wrapper
                  [reagent "0.4.2"]
+                 [cljs-ajax "0.3.3"]
                  ;; Client-side routing
                  [secretary "1.2.0"]
                  ;; CSS
@@ -21,7 +22,7 @@
             ;; brepl
             [com.cemerick/austin "0.1.4"]
             ;; cljs builder
-            [lein-cljsbuild "1.0.3"] ]
+            [lein-cljsbuild "1.0.3"]]
 
   :garden {:builds [{;; Optional name of the build:
                      :id "screen"
