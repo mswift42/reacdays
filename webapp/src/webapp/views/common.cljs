@@ -12,5 +12,5 @@
    [:div {:class-name "col-md-8"}
     [:ul.nav.nav-pills 
      [:li {:class (active? (get-state :nav) "home")}  [:a {:href "#/"} [:span {:class-name "fa fa-home"} " Home"]]]
-     [:li {:class (active? (get-state :nav) "about")} [:a {:href "#/about"} "About"]]
-     ]]])
+     [:li {:class (active? (get-state :nav) "newtask")} [:a {:href "#/newtask"} "New Task"]]
+     [:li {:class (active? (get-state :nav) "about")} [:a {:href "#/about"} "About"]]]]])
