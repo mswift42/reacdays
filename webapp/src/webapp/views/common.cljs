@@ -7,7 +7,7 @@
 (defn header []
   [:div.page-header {:class-name "row"}
    ;; 4 column units
-  [:div#title {:class-name "col-md-4"} "webapp"]
+  [:div#title {:class-name "col-md-4"} "DAYS"]
    ;; 8 column units
    [:div {:class-name "col-md-8"}
     [:ul.nav.nav-pills 
