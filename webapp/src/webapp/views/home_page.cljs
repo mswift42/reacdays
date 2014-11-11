@@ -14,11 +14,6 @@
   (GET "/tasks" {:handler handler
                  :error-handler error-handler}))
 
-(defn post-task
-  [task]
-  (POST "/tasks" {:handler handler
-                  :error-handler error-handler}))
-
 (defn home-page []
   [:div
    [:h2.header "Tasks"]
