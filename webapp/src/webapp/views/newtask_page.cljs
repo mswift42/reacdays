@@ -14,13 +14,18 @@
 (defn error-handler [{:keys [status status-text]}]
   (.log js/console (str "error happended: " status " " status-text)))
 
+(defn date-from-string
+  [datestring]
+  (let [[day month year] (clojure.string/split datestring #"/")]
+    (new js/Date year month day)))
+
 
 (defn post-task
-  []
+  [summary content scheduled]
   (ajax-request
    {:uri  "/tasks"
     :method :post
-    :params {:summary "summary" :content "content" :scheduled "scheduled"}
+    :params {:summary summary :content content :scheduled #(date-from-string scheduled)}
     :format (json-request-format)
     :response-format (json-response-format {:keywords? true})
     :handler handler
@@ -37,7 +42,7 @@
          [:input.form-control {:field :text :id :scheduled :name "scheduled"}])
     (row ""
          [:input.form-control {:type "button" :value "Save" :on-click (fn []
-                                                                        (post-task))}])]])
+                                                                        (post-task :summary :content :scheduled))}])]])
 
 
 (defn newtask-page []
