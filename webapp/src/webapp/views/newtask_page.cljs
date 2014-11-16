@@ -1,6 +1,7 @@
 (ns webapp.views.newtask-page
   (:require [ajax.core :refer [ajax-request json-request-format
-                               json-response-format]]))
+                               json-response-format]]
+            [reagent.core :refer [atom]]))
 
 
 (defn row [label input]
@@ -17,7 +18,11 @@
 (defn date-from-string
   [datestring]
   (let [[day month year] (clojure.string/split datestring #"/")]
-    (new js/Date year month day)))
+    (js/Date. year (- month 1) day)))
+
+(def tasksummary (atom ""))
+(def taskcontent (atom ""))
+(def taskscheduled (atom ""))
 
 
 (defn post-task
@@ -27,26 +32,43 @@
     :method :post
     :params {:summary summary :content content :scheduled #(date-from-string scheduled)}
     :format (json-request-format)
-    :response-format (json-response-format {:keywords? true})
+    :response-format (json-response-format {:keywords? true
+                                            :prefix nil})
     :handler handler
     :error-handler error-handler}))
 
-(def form-template
+
+
+(defn form-template
+  []
   [:div
-   [:form {:class-Name "form-element"}
+   [:form
     (row "Summary"
-         [:input.form-control {:field :text :id :summary :name "summary"}])
+         [:input.form-control {:type :text :value @tasksummary
+                               :on-change #(reset! tasksummary
+                                                   (-> % .-target .-value))}])
     (row "Content"
-         [:textarea.form-control {:field :textarea :id :content :name "content"}])
+         [:textarea.form-control {:value @taskcontent
+                                  :on-change #(reset! taskcontent
+                                                      (-> % .-target .-value))}])
     (row "Scheduled"
-         [:input.form-control {:field :text :id :scheduled :name "scheduled"}])
+         [:input.form-control {:type :date :value @taskscheduled
+                               :on-change #(reset! taskscheduled
+                                                   (-> % .-target .-value))}])
     (row ""
          [:input.form-control {:type "button" :value "Save" :on-click (fn []
-                                                                        (post-task :summary :content :scheduled))}])]])
+                                                                        (post-task @tasksummary @taskcontent (js->clj (date-from-string @taskscheduled))))}])]])
 
+(defn snd-form-tem
+  []
+  [:div
+   [:input {:type "text" :value @tasksummary :on-change #(reset! tasksummary (-> % .-target .-value))
+                  }]
+   (row ""
+        [:button {:on-click #(post-task tasksummary taskcontent taskscheduled)}])])
 
 (defn newtask-page []
   [:div.container
    [:h2.header "New Task"]
    [:div.newtaskform
-    form-template]])
+    [form-template]]])
