@@ -1,0 +1,21 @@
+application: reacdays
+version: 1
+runtime: go
+api_version: go1
+
+handlers:
+- url: /
+  static_files: webapp/index.html
+  upload: webapp/(.*\.html)
+
+- url: /bower_components
+  static_dir: webapp/bower_components/
+
+- url: /css
+  static_dir: webapp/css/
+
+- url: /js
+  static_dir: webapp/js/
+
+- url: /.*
+  script: _go_app

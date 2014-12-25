@@ -1,0 +1,46 @@
+package days
+
+import (
+	"appengine/aetest"
+	"testing"
+	"time"
+)
+
+func genTask(day, summary string, id int64) (*Task, error) {
+	layout := "02/01/2006"
+	t, err := time.Parse(layout, day)
+	if err != nil {
+		return nil, err
+	}
+	return &Task{Summary: summary, Scheduled: t, Id: id}, nil
+}
+
+func TestTask(t *testing.T) {
+	t1, err := genTask("31/01/2014", "first task", 123)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t2, err := genTask("30/01/2014", "second task", 124)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if t1.Id != 123 {
+		t.Error("Expected id 123, got: ", t1.Id)
+	}
+	if t2.Id != 124 {
+		t.Error("Expected id 124, got: ", t2.Id)
+	}
+}
+
+func TestTaskListKey(t *testing.T) {
+	c, err := aetest.NewContext(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer c.Close()
+	k1 := tasklistkey(c)
+	k2 := tasklistkey(c)
+	if !k1.Equal(k2) {
+		t.Error("Expexted keys to be equal.")
+	}
+}

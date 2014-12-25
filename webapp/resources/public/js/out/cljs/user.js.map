@@ -1,0 +1,10 @@
+{"version":3,
+ "file":
+ "/home/severin/go/src/github.com/mswift42/reacdays/webapp/resources/public/js/out/cljs/user.js",
+ "sources":["user.cljs"],
+ "lineCount":13,
+ "mappings":
+ ";AAAA;;;;;;AAIA,AAACA;AAED,2CAAA,uEAAA,kCAAA,pJAACC,gOAEkB,aAAA,AAAO,OAACC;;AAE3B,AAACA",
+ "names":
+ ["cljs.core/enable-console-print!",
+  "figwheel.client/watch-and-reload", "webapp.core/main"]}
