@@ -132,7 +132,7 @@ func TestHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 	_, nerr := t1.save(c)
-	if err != nil {
+	if nerr != nil {
 		t.Fatal(err)
 	}
 	resp := httptest.NewRecorder()

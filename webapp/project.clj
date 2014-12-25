@@ -20,7 +20,7 @@
             ;; CSS
             [lein-garden "0.2.0"]
             ;; brepl
-            [com.cemerick/austin "0.1.4"]
+            [com.cemerick/austin "0.1.5"]
             ;; cljs builder
             [lein-cljsbuild "1.0.3"]]
 
@@ -34,7 +34,7 @@
                                 ;; Compress the output?
                                 :pretty-print? false}}]}
   
- :cljsbuild {:builds [{;; Optional name of the build:
+  :cljsbuild {:builds [{;; Optional name of the build:
                         :id "webapp"
                         ;; Directories of interest:
                         :source-paths ["src" "dev"]

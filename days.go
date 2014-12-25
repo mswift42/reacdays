@@ -11,16 +11,30 @@ import (
 )
 
 type Task struct {
-	Id        int64     `json:"id" datastore:"-"`
-	Summary   string    `json:"summary"`
-	User      string    `json:"user"`
-	Content   string    `json:"content" datastore:",noindex"`
-	Scheduled time.Time `json:"scheduled"`
-	Done      string    `json:"done"`
+	Id        int64  `json:"id" datastore:"-"`
+	Summary   string `json:"summary"`
+	Content   string `json:"content" datastore:",noindex"`
+	Scheduled string `json:"scheduled"`
+	Done      string `json:"done"`
 }
 
 func tasklistkey(c appengine.Context) *datastore.Key {
 	return datastore.NewKey(c, "Task", "default_tasklist", 0, nil)
+}
+
+// parseTime - convert a time string with layout
+// dd/mm/yyyy to time.Time type.
+func parseTime(s string) *time.Time {
+	layout := "02/01/2006"
+	t, _ := time.Parse(layout, s)
+	return &t
+}
+
+// formatDate - convert a time.Time type
+// to a string with layout dd/mm/yyyy
+func formatDate(t *time.Time) string {
+	layout := "02/01/2006"
+	return t.Format(layout)
 }
 
 func (t *Task) key(c appengine.Context) *datastore.Key {

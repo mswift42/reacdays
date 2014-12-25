@@ -15,10 +15,10 @@
 (defn error-handler [{:keys [status status-text]}]
   (.log js/console (str "error happended: " status " " status-text)))
 
-(defn date-from-string
-  [datestring]
-  (let [[day month year] (clojure.string/split datestring #"/")]
-    (js/Date. year (- month 1) day)))
+;; (defn date-from-string
+;;   [datestring]
+;;   (let [[day month year] (clojure.string/split datestring #"/")]
+;;     (new js/Date year (- month 1) day)))
 
 (def tasksummary (atom ""))
 (def taskcontent (atom ""))
@@ -30,10 +30,10 @@
   (ajax-request
    {:uri  "/tasks"
     :method :post
-    :params {:summary summary :content content :scheduled #(date-from-string scheduled)}
+    :params {:summary summary :content content :scheduled scheduled}
     :format (json-request-format)
     :response-format (json-response-format {:keywords? true
-                                            :prefix nil})
+                                            :prefix true})
     :handler handler
     :error-handler error-handler}))
 
@@ -57,15 +57,8 @@
                                                    (-> % .-target .-value))}])
     (row ""
          [:input.form-control {:type "button" :value "Save" :on-click (fn []
-                                                                        (post-task @tasksummary @taskcontent (js->clj (date-from-string @taskscheduled))))}])]])
+                                                                        (post-task @tasksummary @taskcontent @taskscheduled))}])]])
 
-(defn snd-form-tem
-  []
-  [:div
-   [:input {:type "text" :value @tasksummary :on-change #(reset! tasksummary (-> % .-target .-value))
-                  }]
-   (row ""
-        [:button {:on-click #(post-task tasksummary taskcontent taskscheduled)}])])
 
 (defn newtask-page []
   [:div.container

@@ -6,7 +6,7 @@ api_version: go1
 handlers:
 - url: /
   static_files: webapp/resources/index.html
-  upload: webapp/resources(.*\.html)
+  upload: webapp/resources/(.*\.html)
 
 - url: /bower_components
   static_dir: webapp/bower_components/
